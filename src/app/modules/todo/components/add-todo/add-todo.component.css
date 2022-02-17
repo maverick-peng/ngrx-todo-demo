@@ -1,0 +1,25 @@
+.todo__input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #707070;
+  outline: none;
+  line-height: 2rem;
+  font-size: 1rem;
+}
+
+.todo__btn--add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 8px;
+  background: transparent;
+  border: none;
+  padding:0 ;
+}
+
+.todo__btn--add:hover {
+  cursor: pointer;
+}

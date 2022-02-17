@@ -1,0 +1,33 @@
+.search {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.search__input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #F5BB1B;
+  text-align: right;
+  line-height: 20px;
+  transition: all 0.2s ease-in-out;
+  color: #BFBEB7;
+  font-size: 1rem;
+}
+
+.search__input:focus {
+  color: #008884;
+  line-height: 30px;
+  font-size: 1.2rem;
+}
+.search__icon {
+  position: absolute;
+  bottom: 6px;
+  left: 0px;
+  transition: all 0.2s ease-in-out;
+}
+.search__input:focus + .search__icon {
+  transform: scale(1.2) translateX(-3px);
+}

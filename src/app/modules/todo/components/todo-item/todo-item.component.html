@@ -1,0 +1,4 @@
+<input class="todo__check" type="checkbox" [id]="'checkbox' + todo.id" [checked]="todo.complete"
+  [(ngModel)]="todo.complete">
+<label for="checkbox" class="todo__title">{{ todo.title }}</label>
+<span class="todo__date">{{ todo.createDate }}</span>

@@ -1,27 +1,13 @@
 # NgrxTodo
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.4.
+## 功能說明
 
-## Development server
+此範例是一個Todo App，功能為新增代辦事項、搜尋代辦事項，以及勾選完成。
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+代辦事項清單可以從localStorage存取
 
-## Code scaffolding
+## 練習
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+使用ngrx相關套件(store, effect)，改寫 app 的資料管理方式(原本是用Subject)
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+> 注意代辦事項清單必須要在新增/搜尋(或是額外實作刪除)後及時更新。

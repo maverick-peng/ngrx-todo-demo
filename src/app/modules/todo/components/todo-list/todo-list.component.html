@@ -1,0 +1,14 @@
+<div class="todo">
+  <div class="todo__search" app-todo-search [placeholder]="'搜尋標題'"></div>
+
+  <ul class="todo__ls">
+    <li class="todo__item" app-todo-item *ngFor="let todo of todos$ | async" [todo]="todo"></li>
+  </ul>
+
+  <div class="todo__add" app-add-todo></div>
+
+  <div class="todo__save">
+    <button class="todo__btn todo__btn--save" (click)="saveTodos()">Save</button>
+    <button class="todo__btn todo__btn--load" (click)="loadTodos()">Load</button>
+  </div>
+</div>
