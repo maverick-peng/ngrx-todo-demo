@@ -1,3 +1,7 @@
 .todo__date {
   margin-left: auto;
 }
+.todo__delete {
+  color: red;
+  cursor: pointer;
+}

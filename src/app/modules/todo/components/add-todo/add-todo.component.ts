@@ -1,25 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-add-todo, [app-add-todo]',
   templateUrl: './add-todo.component.html',
-  styleUrls: ['./add-todo.component.css']
+  styleUrls: ['./add-todo.component.css'],
 })
 export class AddTodoComponent implements OnInit {
+  title = '';
+  @Output('onadd') addEmitter = new EventEmitter<string>();
 
-  title = ''
+  // constructor(private todoService: TodoService) { }
 
-  constructor(private todoService: TodoService) { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   addTodo() {
-    if (!this.title) return;
+    // if (!this.title) return;
 
-    this.todoService.addTodo(this.title);
-    this.title = '';
+    // this.todoService.addTodo(this.title);
+    // this.title = '';
+
+    this.addEmitter.next(this.title);
   }
 }

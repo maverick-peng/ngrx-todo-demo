@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { Todo } from "../models/todo.model";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Todo } from '../models/todo.model';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class TodoService {
-
   loaded = false;
   loading = false;
   todos: Todo[] = [];
@@ -15,45 +15,64 @@ export class TodoService {
     this.todoSubject.next(this.todos);
   }
 
+  // loadTodos() {
+  //   let result: Todo[] = [];
+  //   const data = localStorage.getItem('todos');
+  //   if (data) {
+  //     result = JSON.parse(data);
+  //   }
+  //   this.todos = result;
+  //   this.todoSubject.next(this.todos);
+  // }
+
   loadTodos() {
-    let result: Todo[] = [];
-    const data = localStorage.getItem('todos');
-    if (data) {
-      result = JSON.parse(data);
-    }
-    this.todos = result;
-    this.todoSubject.next(this.todos);
+    return of(true).pipe(
+      map(() => {
+        let result: Todo[] = [];
+        const data = localStorage.getItem('todos');
+        if (data) {
+          result = JSON.parse(data);
+        }
+        return result;
+      })
+    );
   }
 
-  saveTodos() {
-    localStorage.setItem('todos', JSON.stringify(this.todos));
+  // saveTodos() {
+  //   localStorage.setItem('todos', JSON.stringify(this.todos));
+  // }
+
+  saveTodos(todos: Todo[]) {
+    return of(true).pipe(
+      map(() => localStorage.setItem('todos', JSON.stringify(todos)))
+    );
   }
 
   getTodos(): Observable<Todo[]> {
     return this.todoSubject;
   }
 
-  addTodo(title: string){
+  addTodo(title: string) {
     const newTodo: Todo = {
       title,
       createDate: new Date().toLocaleDateString(),
       id: this.generateNewId(),
-      complete: false
-    }
+      complete: false,
+    };
 
     this.todos.push(newTodo);
-    console.log(this.todos)
+    console.log(this.todos);
     this.todoSubject.next(this.todos);
   }
 
   removeTodo(id: number) {
-    this.todos = this.todos.filter(todo => todo.id !== id);
+    this.todos = this.todos.filter((todo) => todo.id !== id);
     this.todoSubject.next(this.todos);
   }
 
   setTodo(todo: Todo) {
-    const found = this.todos.find(el => el.id === todo.id);
-    if (found){
+    const found = this.todos.find((el) => el.id === todo.id);
+    if (found) {
       found.complete = todo.complete;
       found.createDate = todo.createDate;
       found.title = todo.title;
@@ -62,11 +81,13 @@ export class TodoService {
   }
 
   searchTodo(search: string) {
-    console.log(search)
+    console.log(search);
     if (search === '') {
       this.todoSubject.next(this.todos);
     } else {
-      const searchResult = this.todos.filter(el => el.title!.indexOf(search) > -1);
+      const searchResult = this.todos.filter(
+        (el) => el.title!.indexOf(search) > -1
+      );
       this.todoSubject.next(searchResult);
     }
   }
@@ -78,6 +99,4 @@ export class TodoService {
       return this.todos.length;
     }
   }
-
-
 }
