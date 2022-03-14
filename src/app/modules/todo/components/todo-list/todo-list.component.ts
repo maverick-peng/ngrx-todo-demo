@@ -5,8 +5,8 @@ import * as fromStore from '../../store';
 
 import { Todo } from '../../models/todo.model';
 import { Observable } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-todo-list',
@@ -23,7 +23,7 @@ export class TodoListComponent implements OnInit {
     // this.todos$ = this.todoService.getTodos();
     this.todos$ = this.store
       .select(fromStore.getTodoSearchResults)
-      .pipe(tap((a) => console.log(a)));
+      .pipe(map((dict) => Object.values(dict)));
   }
   ngOnInit(): void {}
 
@@ -43,5 +43,9 @@ export class TodoListComponent implements OnInit {
 
   removeTodo(id: number) {
     this.store.dispatch(new fromStore.RemoveTodo(id));
+  }
+
+  completeChange(todo: Todo) {
+    this.store.dispatch(new fromStore.SetTodo(todo));
   }
 }

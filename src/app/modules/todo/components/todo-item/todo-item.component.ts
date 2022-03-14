@@ -9,6 +9,7 @@ import { Todo } from '../../models/todo.model';
 export class TodoItemComponent implements OnInit {
   @Input() todo: Todo = {};
   @Output('onremove') deleteEmiiter = new EventEmitter<number>();
+  @Output('completeChange') completeEmiiter = new EventEmitter<Todo>();
 
   constructor() {}
 
@@ -16,5 +17,9 @@ export class TodoItemComponent implements OnInit {
 
   delete() {
     this.deleteEmiiter.next(this.todo.id);
+  }
+
+  change(checked) {
+    this.completeEmiiter.next({ ...this.todo, complete: checked });
   }
 }

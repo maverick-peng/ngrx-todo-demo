@@ -3,7 +3,8 @@
   type="checkbox"
   [id]="'checkbox' + todo.id"
   [checked]="todo.complete"
-  [(ngModel)]="todo.complete"
+  (change)="change(complete.checked)"
+  #complete
 />
 <label for="checkbox" class="todo__title">{{ todo.title }}</label>
 <span class="todo__date">{{ todo.createDate }}</span>

@@ -28,7 +28,7 @@ export class TodoService {
   loadTodos() {
     return of(true).pipe(
       map(() => {
-        let result: Todo[] = [];
+        let result: { [id: number]: Todo } = {};
         const data = localStorage.getItem('todos');
         if (data) {
           result = JSON.parse(data);
@@ -42,7 +42,7 @@ export class TodoService {
   //   localStorage.setItem('todos', JSON.stringify(this.todos));
   // }
 
-  saveTodos(todos: Todo[]) {
+  saveTodos(todos: { [id: number]: Todo }) {
     return of(true).pipe(
       map(() => localStorage.setItem('todos', JSON.stringify(todos)))
     );
@@ -52,23 +52,23 @@ export class TodoService {
     return this.todoSubject;
   }
 
-  addTodo(title: string) {
-    const newTodo: Todo = {
-      title,
-      createDate: new Date().toLocaleDateString(),
-      id: this.generateNewId(),
-      complete: false,
-    };
+  // addTodo(title: string) {
+  //   const newTodo: Todo = {
+  //     title,
+  //     createDate: new Date().toLocaleDateString(),
+  //     id: this.generateNewId(),
+  //     complete: false,
+  //   };
 
-    this.todos.push(newTodo);
-    console.log(this.todos);
-    this.todoSubject.next(this.todos);
-  }
+  //   this.todos.push(newTodo);
+  //   console.log(this.todos);
+  //   this.todoSubject.next(this.todos);
+  // }
 
-  removeTodo(id: number) {
-    this.todos = this.todos.filter((todo) => todo.id !== id);
-    this.todoSubject.next(this.todos);
-  }
+  // removeTodo(id: number) {
+  //   this.todos = this.todos.filter((todo) => todo.id !== id);
+  //   this.todoSubject.next(this.todos);
+  // }
 
   setTodo(todo: Todo) {
     const found = this.todos.find((el) => el.id === todo.id);

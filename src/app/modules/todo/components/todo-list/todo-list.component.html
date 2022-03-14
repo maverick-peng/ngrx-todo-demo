@@ -8,6 +8,7 @@
       *ngFor="let todo of todos$ | async"
       [todo]="todo"
       (onremove)="removeTodo($event)"
+      (completeChange)="completeChange($event)"
     ></li>
   </ul>
 

@@ -3,7 +3,7 @@ import { Todo } from '../models/todo.model';
 import * as fromTodo from './todo.action';
 
 export interface TodoState {
-  data: Todo[];
+  entities: { [id: number]: Todo };
   loading: boolean;
   loaded: boolean;
   saved: boolean;
@@ -12,7 +12,7 @@ export interface TodoState {
 }
 
 const initialState: TodoState = {
-  data: [],
+  entities: {},
   loading: false,
   loaded: false,
   saved: false,
@@ -29,12 +29,12 @@ export const reducer = (state = initialState, action: any): TodoState => {
       };
     }
     case fromTodo.LOAD_TODO_SUCCESS: {
-      const data = action.payload;
+      const entities = action.payload;
       return {
         ...state,
         loading: false,
         loaded: true,
-        data,
+        entities,
       };
     }
     case fromTodo.LOAD_TODO_FAIL: {
@@ -49,33 +49,38 @@ export const reducer = (state = initialState, action: any): TodoState => {
         title: action.payload,
         createDate: new Date().toLocaleDateString(),
         id: Math.ceil(Math.random() * 1000000),
+        complete: false,
       };
       return {
         ...state,
-        data: [...state.data, todo],
+        entities: { ...state.entities, [todo.id]: todo },
       };
     }
     case fromTodo.REMOVE_TODO: {
       const id = action.payload;
-      const data = [...state.data.filter((el) => el.id !== id)];
+      const entities = { ...state.entities };
+      delete entities[id];
       return {
         ...state,
-        data,
+        entities,
       };
     }
     case fromTodo.SET_TODO: {
       const todo = action.payload;
-      const found = state.data.find((el) => el.id === todo.id);
+      const found = state.entities[todo.id];
+      // const found = state.data.find((el) => el.id === todo.id);
       if (found) {
-        found.complete = todo.complete;
-        found.createDate = todo.createDate;
-        found.title = todo.title;
-
-        const data = [...state.data.filter((el) => el.id !== todo.id), found];
+        const newTodo: Todo = {
+          ...todo,
+        };
+        const entities = {
+          ...state.entities,
+          [found.id]: newTodo,
+        };
 
         return {
           ...state,
-          data,
+          entities,
         };
       }
 
@@ -103,7 +108,7 @@ export const reducer = (state = initialState, action: any): TodoState => {
     }
     case fromTodo.SEARCH_TODO: {
       const searchStr = action.payload;
-      const searchResult = state.data.filter(
+      const searchResult = Object.values(state.entities).filter(
         (el) => el.title!.indexOf(searchStr) > -1
       );
       return {
@@ -117,7 +122,7 @@ export const reducer = (state = initialState, action: any): TodoState => {
 };
 
 // selectors
-export const getAllTodos = (state: TodoState) => state.data;
+export const getAllTodos = (state: TodoState) => state.entities;
 export const getTodosLoading = (state: TodoState) => state.loading;
 export const getTodosLoaded = (state: TodoState) => state.loaded;
 export const getTodoSaved = (state: TodoState) => state.saved;

@@ -19,7 +19,7 @@ export const getTodoState = createSelector(
   getAppState,
   (state: AppState) => state.todos
 );
-export const getAllTodos = createSelector(getTodoState, (state) => state.data);
+export const getAllTodos = createSelector(getTodoState, fromTodos.getAllTodos);
 
 export const getTodosLoaded = createSelector(
   getTodoState,
