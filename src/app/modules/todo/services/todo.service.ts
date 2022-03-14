@@ -28,7 +28,7 @@ export class TodoService {
   loadTodos() {
     return of(true).pipe(
       map(() => {
-        let result: { [id: number]: Todo } = {};
+        let result: Todo[];
         const data = localStorage.getItem('todos');
         if (data) {
           result = JSON.parse(data);

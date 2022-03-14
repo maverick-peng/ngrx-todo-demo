@@ -1,9 +1,15 @@
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+
 import { Todo } from '../models/todo.model';
 
 import * as fromTodo from './todo.action';
 
-export interface TodoState {
-  entities: { [id: number]: Todo };
+// export interface TodoState {
+//   entities: { [id: number]: Todo };
+
+// }
+
+export interface State extends EntityState<Todo> {
   loading: boolean;
   loaded: boolean;
   saved: boolean;
@@ -11,16 +17,26 @@ export interface TodoState {
   search: string;
 }
 
-const initialState: TodoState = {
-  entities: {},
+// const initialState: TodoState = {
+//   entities: {},
+//   loading: false,
+//   loaded: false,
+//   saved: false,
+//   searchResult: [],
+//   search: '',
+// };
+
+const adapter = createEntityAdapter<Todo>();
+
+const initialState = adapter.getInitialState({
   loading: false,
   loaded: false,
   saved: false,
   searchResult: [],
   search: '',
-};
+});
 
-export const reducer = (state = initialState, action: any): TodoState => {
+export const reducer = (state = initialState, action: any): State => {
   switch (action.type) {
     case fromTodo.LOAD_TODO: {
       return {
@@ -29,13 +45,8 @@ export const reducer = (state = initialState, action: any): TodoState => {
       };
     }
     case fromTodo.LOAD_TODO_SUCCESS: {
-      const entities = action.payload;
-      return {
-        ...state,
-        loading: false,
-        loaded: true,
-        entities,
-      };
+      const data = action.payload;
+      return adapter.setAll(data, state);
     }
     case fromTodo.LOAD_TODO_FAIL: {
       return {
@@ -51,40 +62,15 @@ export const reducer = (state = initialState, action: any): TodoState => {
         id: Math.ceil(Math.random() * 1000000),
         complete: false,
       };
-      return {
-        ...state,
-        entities: { ...state.entities, [todo.id]: todo },
-      };
+      return adapter.addOne(todo, state);
     }
     case fromTodo.REMOVE_TODO: {
       const id = action.payload;
-      const entities = { ...state.entities };
-      delete entities[id];
-      return {
-        ...state,
-        entities,
-      };
+      return adapter.removeOne(id, state);
     }
     case fromTodo.SET_TODO: {
       const todo = action.payload;
-      const found = state.entities[todo.id];
-      // const found = state.data.find((el) => el.id === todo.id);
-      if (found) {
-        const newTodo: Todo = {
-          ...todo,
-        };
-        const entities = {
-          ...state.entities,
-          [found.id]: newTodo,
-        };
-
-        return {
-          ...state,
-          entities,
-        };
-      }
-
-      return { ...state };
+      return adapter.setOne(todo, state);
     }
     case fromTodo.SAVE_TODO: {
       return {
@@ -122,17 +108,17 @@ export const reducer = (state = initialState, action: any): TodoState => {
 };
 
 // selectors
-export const getAllTodos = (state: TodoState) => state.entities;
-export const getTodosLoading = (state: TodoState) => state.loading;
-export const getTodosLoaded = (state: TodoState) => state.loaded;
-export const getTodoSaved = (state: TodoState) => state.saved;
+export const { selectAll } = adapter.getSelectors();
+export const getTodosLoading = (state: State) => state.loading;
+export const getTodosLoaded = (state: State) => state.loaded;
+export const getTodoSaved = (state: State) => state.saved;
 
-export const getSearch = (state: TodoState) => state.search;
-export const getSearchResults = (state: TodoState) => {
+export const getSearch = (state: State) => state.search;
+export const getSearchResults = (state: State) => {
   if (getSearch(state)) {
     return state.searchResult;
   }
-  return getAllTodos(state);
+  return selectAll(state);
 };
 
 export * from './todo.action';

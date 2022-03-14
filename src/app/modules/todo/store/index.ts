@@ -6,7 +6,7 @@ import {
 import * as fromTodos from './todo.reducer';
 
 export interface AppState {
-  todos: fromTodos.TodoState;
+  todos: fromTodos.State;
 }
 
 export const reducers: ActionReducerMap<AppState, fromTodos.TodoActions> = {
@@ -19,7 +19,7 @@ export const getTodoState = createSelector(
   getAppState,
   (state: AppState) => state.todos
 );
-export const getAllTodos = createSelector(getTodoState, fromTodos.getAllTodos);
+export const getAllTodos = createSelector(getTodoState, fromTodos.selectAll);
 
 export const getTodosLoaded = createSelector(
   getTodoState,

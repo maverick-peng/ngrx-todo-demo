@@ -20,7 +20,7 @@ export class LoadTodo implements Action {
 
 export class LoadTodoSuccess implements Action {
   type = LOAD_TODO_SUCCESS;
-  constructor(public payload: { [id: string]: Todo }) {}
+  constructor(public payload: Todo[]) {}
 }
 
 export class LoadTodoFail implements Action {
